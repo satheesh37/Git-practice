@@ -12,10 +12,10 @@ USERID=$(id -u)
     R="\e[31m"
     G="\e[32m"
     Y="\e[33m"
-    N=\"e[0m"
+    N="\e[0m"
 
-CHECK-ROOT(){
-    if [ $USERID -ne 0 ]
+CHECK_ROOT(){
+     if [ $USERID -ne 0 ]
     then
         echo -e "$R Please run this script $N" &>>$LOGS_FILE
         exit 1
@@ -25,11 +25,23 @@ CHECK-ROOT(){
 VALIDATE(){
     if [ $1 -ne 0 ]
     then
-        echo -e "$2 is ....$R FAILED $N" &>>$LOGS_FILE
+        echo -e "$2 is....$R FAILED $N" &>>$LOGS_FILE
         exit 1
     else 
-        echo -e "$2 is ... $R SUCCESS $N" &>>$LOGS_FILE
+        echo -e "$2 is... $G SUCCESS $N" &>>$LOGS_FILE
     fi    
 }
 
 CHEECK_ROOT
+for package in $@
+do
+   dnf list installed $package &>>$LOGS_FILE
+   if [ $? -ne 0 ]
+then
+   echo "$package not installed...going to installed" &>>$LOGS_FILE
+   dnf install $package -y &>>$LOGS_FILE
+   VALIDATE $? "installimg $package" 
+   else 
+    echo "$package is already $Y installed $N" &>>$LOGS_FILE
+    fi
+done
