@@ -32,7 +32,7 @@ VALIDATE(){
     fi    
 }
 
-CHEECK_ROOT
+CHECK_ROOT
 for package in $@
 do
    dnf list installed $package &>>$LOGS_FILE
