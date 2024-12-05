@@ -32,7 +32,18 @@ VALIDATE(){
     fi    
 }
 
+USAGE(){
+ echo -e "$R USAGE:: $N sudo sh 13.redirectors.sh package1 paackage2......."
+ exit 1
+}
+
 CHECK_ROOT
+
+if [ $# -eq 0 ]
+then
+  USANGE
+fi
+
 for package in $@
 do
    dnf list installed $package &>>$LOGS_FILE
